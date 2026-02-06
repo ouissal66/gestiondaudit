@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div id="wrapper">
+
+    {% include 'admin/partials/sidebar.html.twig' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+
+            {% include 'admin/partials/navbar.html.twig' %}
+
+            <div class="container-fluid">
+                {% block admin_content %}{% endblock %}
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
