@@ -122,7 +122,7 @@
         {% for rec in report.recommendations %}
             <div class="recommendation-item">
                 <span class="rec-date">{{ rec.createdAt|date('d/m/Y H:i') }}</span>
-                {{ rec.content|nl2br }}
+                {{ rec.content|raw|nl2br }}
             </div>
         {% endfor %}
     {% endif %}

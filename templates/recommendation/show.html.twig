@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Recommandation{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Détails de la Recommandation</h1>
+        <div class="d-flex">
+            <a href="{{ path('app_recommendation_edit', {'id': recommendation.id}) }}" class="btn btn-warning btn-sm shadow-sm mr-2">
+                <i class="fas fa-edit fa-sm text-white-50 mr-1"></i> Modifier
+            </a>
+            <a href="{{ path('app_recommendation') }}" class="btn btn-primary btn-sm shadow-sm">
+                <i class="fas fa-list fa-sm text-white-50 mr-1"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-lightbulb mr-1"></i> Conseil d'Audit
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="recommendation-full-content text-dark p-3 bg-light rounded border">
+                        {{ recommendation.content|raw|nl2br }}
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-muted small">
+                    Généré le {{ recommendation.createdAt|date('d/m/Y à H:i') }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Info -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4 border-left-info">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-info">Rapport Associé</h6>
+                </div>
+                <div class="card-body">
+                    <h5 class="font-weight-bold text-gray-800">{{ recommendation.report.title }}</h5>
+                    <p class="text-muted small mb-3">ID Rapport : #{{ recommendation.report.id }}</p>
+                    
+                    <div class="mb-3">
+                        <span class="text-xs font-weight-bold text-uppercase d-block mb-1">Statut</span>
+                        {% if recommendation.report.status == 'Validé' %}
+                            <span class="badge badge-success">{{ recommendation.report.status }}</span>
+                        {% elseif recommendation.report.status == 'En cours' %}
+                            <span class="badge badge-primary">{{ recommendation.report.status }}</span>
+                        {% elseif recommendation.report.status == 'Critique' %}
+                            <span class="badge badge-danger">{{ recommendation.report.status }}</span>
+                        {% else %}
+                            <span class="badge badge-secondary">{{ recommendation.report.status }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="text-xs font-weight-bold text-uppercase d-block mb-1">Priorité</span>
+                        <span class="font-weight-bold {% if recommendation.report.priority == 'Forte' %}text-danger{% elseif recommendation.report.priority == 'Moyenne' %}text-warning{% else %}text-success{% endif %}">
+                            {{ recommendation.report.priority }}
+                        </span>
+                    </div>
+
+                    <hr>
+                    <a href="{{ path('app_report_show', {'id': recommendation.report.id}) }}" class="btn btn-info btn-block btn-sm">
+                        <i class="fas fa-eye mr-1"></i> Voir le rapport complet
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h6 class="font-weight-bold mb-3">Actions rapides</h6>
+                    <form method="post" action="{{ path('app_recommendation_delete', {'id': recommendation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette recommandation ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recommendation.id) }}">
+                        <button class="btn btn-outline-danger btn-sm btn-block">
+                            <i class="fas fa-trash mr-1"></i> Supprimer ce conseil
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

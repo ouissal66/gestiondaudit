@@ -51,25 +51,38 @@
             <div class="card shadow mb-4 recommendation-card">
                 <div class="card-header py-3 bg-white d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-list mt-1 mr-2"></i>Dernières Recommandations Générées</h6>
+                    <button type="button" class="btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#recommendationModal">
+                        <i class="fas fa-magic fa-sm mr-1"></i> Générer
+                    </button>
                 </div>
+
+                {{ include('recommendation/_modal.html.twig', {'reports_list': reports}) }}
                 <div class="card-body">
                     {% if recommendations is defined and recommendations|length > 0 %}
                         <div class="list-group">
                             {% for rec in recommendations %}
-                                <div class="list-group-item list-group-item-action flex-column align-items-start border-left-primary mb-3 shadow-primary rounded-lg">
+                                <div class="list-group-item list-group-item-action flex-column align-items-start border-left-primary mb-3 shadow-primary rounded-lg ajax-delete-item">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h5 class="mb-1 text-primary">{{ rec.report.title }}</h5>
                                         <div class="text-right">
                                             <small class="d-block font-weight-bold">{{ rec.createdAt|date('d/m/Y H:i') }}</small>
-                                            <form method="post" action="{{ path('app_recommendation_delete', {'id': rec.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette recommandation ?');" class="d-inline">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rec.id) }}">
-                                                <button class="btn btn-link text-danger p-0 border-0" title="Supprimer">
-                                                    <i class="fas fa-trash-alt fa-sm"></i>
-                                                </button>
-                                            </form>
+                                            <div class="d-flex align-items-center">
+                                                <a href="{{ path('app_recommendation_show', {'id': rec.id}) }}" class="btn btn-link text-info p-0 border-0 mr-2" title="Voir les détails">
+                                                    <i class="fas fa-eye fa-sm"></i>
+                                                </a>
+                                                <a href="{{ path('app_recommendation_edit', {'id': rec.id}) }}" class="btn btn-link text-primary p-0 border-0 mr-2" title="Modifier">
+                                                    <i class="fas fa-edit fa-sm"></i>
+                                                </a>
+                                                <form method="post" action="{{ path('app_recommendation_delete', {'id': rec.id}) }}" class="ajax-delete-form" data-confirm="Êtes-vous sûr de vouloir supprimer cette recommandation ?">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rec.id) }}">
+                                                    <button class="btn btn-link text-danger p-0 border-0" title="Supprimer">
+                                                        <i class="fas fa-trash-alt fa-sm"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                    <p class="mb-2 text-dark" style="font-size: 1.05rem;">{{ rec.content|nl2br }}</p>
+                                    <p class="mb-2 text-dark" style="font-size: 1.05rem;">{{ rec.content|raw|nl2br }}</p>
                                     <div class="d-flex justify-content-between align-items-center mt-2">
                                         <small class="text-muted"><i class="fas fa-file-alt mr-1"></i> Rapport #{{ rec.report.id }} - <span class="badge badge-info text-white">Score: {{ rec.report.score }}/100</span></small>
                                         <a href="{{ path('app_report_show', {'id': rec.report.id}) }}" class="btn btn-sm btn-outline-primary py-0">Voir le rapport</a>
@@ -132,9 +145,10 @@
 
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sendBtn = document.getElementById('send-btn');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chatbot initialization logic
+            const sendBtn = document.getElementById('send-btn');
         const userInput = document.getElementById('user-input');
         const chatBox = document.getElementById('chat-box');
 

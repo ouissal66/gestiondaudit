@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_report_delete', {'id': report.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');" style="display: inline-block;">
+<form method="post" action="{{ path('app_report_delete', {'id': report.id}) }}" class="ajax-delete-form" data-confirm="Êtes-vous sûr de vouloir supprimer ce rapport ?" data-redirect="{{ redirect|default('') }}" style="display: inline-block;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ report.id) }}">
     <button class="btn btn-danger">Supprimer</button>
 </form>

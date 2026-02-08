@@ -129,7 +129,17 @@ final class ReportController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$report->getId(), $request->request->get('_token'))) {
             $entityManager->remove($report);
             $entityManager->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'Le rapport a été supprimé avec succès.');
+                return $this->json(['success' => true, 'message' => 'Le rapport a été supprimé avec succès.']);
+            }
+
             $this->addFlash('success', 'Le rapport a été supprimé avec succès.');
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->json(['success' => false, 'message' => 'Token CSRF invalide.'], 400);
         }
 
         return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
@@ -139,23 +149,103 @@ final class ReportController extends AbstractController
     {
         $score = $report->getScore();
         $priority = $report->getPriority();
-        $content = "Analyse générée le " . date('d/m/Y H:i') . " :\n\n";
+        $description = strtolower($report->getDescription());
+        
+        // --- COMPONENTS FOR HIGHEST ENTROPY ---
+        
+        $intros = [
+            "L'analyse IA de ce rapport révèle les points suivants :",
+            "Voici les observations générées automatiquement pour cet audit :",
+            "Basé sur les données du rapport #" . $report->getId() . ", voici nos conseils :",
+            "Examen des indicateurs de performance terminé :",
+            "Synthèse intelligente des points de contrôle :"
+        ];
 
-        // Logic based on Score and Priority
-        if ($score < 50) {
-            $content .= "URGENT : Le score de conformité est critique ($score/100). ";
-            $content .= "Il est impératif de revoir l'ensemble des points de contrôle défaillants. ";
-            if ($priority === 'Forte') {
-                $content .= "Compte tenu de la priorité FORTE, une réunion de crise doit être planifiée immédiatement.";
+        $diagnosisOptions = [
+            'critical' => [
+                "<strong class='text-danger'>Situation Critique</strong> : Le score de $score/100 est bien en dessous des seuils de sécurité.",
+                "<strong class='text-danger'>Alerte Majeure</strong> : Nous avons détecté des failles critiques ($score/100) nécessitant une intervention.",
+                "<strong class='text-danger'>Risque Élevé</strong> : La conformité ($score/100) est compromise. Une action corrective est prioritaire.",
+                "<strong class='text-danger'>Alerte Système</strong> : Score de $score/100. Les protocoles standards ne sont pas respectés."
+            ],
+            'warning' => [
+                "<strong class='text-warning'>Avertissement</strong> : Avec $score/100, la situation est sous contrôle mais fragile.",
+                "<strong class='text-warning'>Score Moyen</strong> ($score/100) : Des axes d'amélioration ont été identifiés pour stabiliser l'audit.",
+                "<strong class='text-warning'>Note de Vigilance</strong> : Le résultat de $score/100 suggère un besoin de documentation supplémentaire.",
+                "<strong class='text-warning'>Diagnostic</strong> : Performance de $score/100. Une surveillance accrue est recommandée."
+            ],
+            'success' => [
+                "<strong class='text-success'>Excellente Performance</strong> : Score de $score/100. Les standards sont parfaitement respectés.",
+                "<strong class='text-success'>Validation</strong> : Votre score de $score/100 démontre une gestion rigoureuse des processus.",
+                "<strong class='text-success'>Succès</strong> : Conformité totale identifiée ($score/100). Aucun écart majeur détecté.",
+                "<strong class='text-success'>Résultat Optimal</strong> : Félicitations pour ce score de $score/100."
+            ]
+        ];
+
+        $contextAdvice = [
+            'sécurité' => [
+                "<span class='text-primary font-weight-bold'>Sécurité</span> : Renforcez le chiffrement des logs.",
+                "<span class='text-primary font-weight-bold'>Sécurité</span> : Auditez les accès périmétriques.",
+                "<span class='text-primary font-weight-bold'>Sécurité</span> : Changez les clés d'accès périodiquement."
+            ],
+            'accès' => [
+                "<span class='text-primary font-weight-bold'>Accès</span> : Vérifiez la hiérarchie des permissions.",
+                "<span class='text-primary font-weight-bold'>Accès</span> : Supprimez les comptes inactifs immédiatement.",
+                "<span class='text-primary font-weight-bold'>Accès</span> : Activez l'authentification double facteur."
+            ],
+            'donnée' => [
+                "<span class='text-primary font-weight-bold'>Données</span> : Testez l'intégrité des backups.",
+                "<span class='text-primary font-weight-bold'>Données</span> : Vérifiez la cohérence des flux entrants.",
+                "<span class='text-primary font-weight-bold'>Données</span> : Archivez les historiques de plus de 2 ans."
+            ],
+            'réseau' => [
+                "<span class='text-primary font-weight-bold'>Réseau</span> : Scannez les ports ouverts inutilement.",
+                "<span class='text-primary font-weight-bold'>Réseau</span> : Optimisez la latence des points de terminaison.",
+                "<span class='text-primary font-weight-bold'>Réseau</span> : Isolez les segments de production."
+            ]
+        ];
+
+        $priorities = [
+            "<span class='text-info font-weight-bold'>Top Priorité</span> : Traitez ce dossier avant la fin de journée.",
+            "<span class='text-info font-weight-bold'>Calendrier</span> : Fixez une échéance de remédiation à J+7.",
+            "<span class='text-info font-weight-bold'>Équipe</span> : Demandez une contre-expertise à un collègue.",
+            "<span class='text-info font-weight-bold'>Technique</span> : Lancez un diagnostic approfondi du sous-système."
+        ];
+
+        $closings = [
+            "Nous restons en veille sur ce dossier.",
+            "Action recommandée suite à cette analyse.",
+            "Fin de la synthèse IA.",
+            "Bonne mise en œuvre des recommandations.",
+            "IA MindAudit à votre service."
+        ];
+
+        // --- SELECTION LOGIC ---
+        
+        $content = "<strong class='text-dark'>Analyse IA (" . date('H:i:s') . ")</strong>\n\n";
+        
+        // 1. Intro
+        $content .= $intros[array_rand($intros)] . "\n\n";
+        
+        // 2. Diagnosis
+        $cat = $score < 50 ? 'critical' : ($score < 80 ? 'warning' : 'success');
+        $content .= $diagnosisOptions[$cat][array_rand($diagnosisOptions[$cat])] . "\n\n";
+        
+        // 3. Contextual (if any)
+        $hasContext = false;
+        foreach ($contextAdvice as $key => $advices) {
+            if (str_contains($description, $key)) {
+                if (!$hasContext) { $content .= "<strong>Focus spécifique :</strong>\n"; $hasContext = true; }
+                $content .= "- " . $advices[array_rand($advices)] . "\n";
             }
-        } elseif ($score < 80) {
-            $content .= "ATTENTION : Le score est moyen ($score/100). ";
-            $content .= "Certains aspects nécessitent une correction rapide pour éviter une dégradation. ";
-            $content .= "Veuillez consulter les annexes techniques.";
-        } else {
-            $content .= "EXCELLENT : Le rapport indique un bon niveau de conformité ($score/100). ";
-            $content .= "Maintenez les efforts actuels. Une simple revue périodique est recommandée.";
         }
+        if ($hasContext) $content .= "\n";
+
+        // 4. Priority / Action
+        $content .= $priorities[array_rand($priorities)] . "\n\n";
+
+        // 5. Closing
+        $content .= "<em class='text-muted'>— " . $closings[array_rand($closings)] . "</em>";
 
         $recommendation = new \App\Entity\Recommendation();
         $recommendation->setContent($content);
@@ -164,7 +254,7 @@ final class ReportController extends AbstractController
         $entityManager->persist($recommendation);
         $entityManager->flush();
 
-        $this->addFlash('success', 'La recommandation a été générée avec succès.');
+        $this->addFlash('success', 'Une nouvelle recommandation stylisée a été générée.');
 
         return $this->redirectToRoute('app_report_show', ['id' => $report->getId()]);
     }

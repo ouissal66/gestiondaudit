@@ -1,0 +1,67 @@
+<!-- Recommendation Selection Modal -->
+<div class="modal fade" id="recommendationModal" tabindex="-1" role="dialog" aria-labelledby="recommendationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-left-primary shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title text-primary" id="recommendationModalLabel">
+                    <i class="fas fa-magic mr-2"></i>Générer une recommandation
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="global-recommendation-form" method="post" novalidate>
+                <div class="modal-body">
+                    <p class="text-gray-600 mb-4">Sélectionnez un rapport pour lequel vous souhaitez obtenir une analyse IA et des recommandations immédiates.</p>
+                    
+                    <div class="form-group">
+                        <label for="report-select" class="font-weight-bold">Choisir un Rapport :</label>
+                        <select id="report-select" class="form-control select2-modal">
+                            <option value="" disabled selected>-- Sélectionner un rapport --</option>
+                            {% for report in reports_list %}
+                                <option value="{{ path('app_report_recommend', {'id': report.id}) }}">
+                                    {{ report.title }} (#{{ report.id }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary" id="submit-gen-rec">
+                        <i class="fas fa-cog fa-spin mr-1 d-none" id="loader-icon"></i>
+                        Lancer l'Analyse
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('global-recommendation-form');
+        const select = document.getElementById('report-select');
+        const loader = document.getElementById('loader-icon');
+        const submitBtn = document.getElementById('submit-gen-rec');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const actionUrl = select.value;
+            if (!actionUrl) {
+                alert('Veuillez sélectionner un rapport.');
+                return;
+            }
+
+            // Update form action and submit
+            form.action = actionUrl;
+            
+            // Show loading state
+            loader.classList.remove('d-none');
+            submitBtn.disabled = true;
+            
+            // Traditional submit to existing route
+            form.submit();
+        });
+    });
+</script>

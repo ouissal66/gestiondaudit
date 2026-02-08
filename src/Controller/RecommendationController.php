@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Recommendation;
+use App\Form\RecommendationType;
 use App\Repository\RecommendationRepository;
 use App\Repository\ReportRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,6 +35,35 @@ class RecommendationController extends AbstractController
 
         return $this->render('recommendation/index.html.twig', [
             'recommendations' => $recommendations,
+            'reports' => $recommendationRepository->getEntityManager()->getRepository(\App\Entity\Report::class)->findBy([], ['title' => 'ASC']),
+        ]);
+    }
+
+    #[Route('/recommendation/{id}/edit', name: 'app_recommendation_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Recommendation $recommendation, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(RecommendationType::class, $recommendation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La recommandation a été mise à jour.');
+
+            return $this->redirectToRoute('app_recommendation', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('recommendation/edit.html.twig', [
+            'recommendation' => $recommendation,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/recommendation/{id}', name: 'app_recommendation_show', methods: ['GET'])]
+    public function show(Recommendation $recommendation): Response
+    {
+        return $this->render('recommendation/show.html.twig', [
+            'recommendation' => $recommendation,
         ]);
     }
 
@@ -134,9 +164,24 @@ class RecommendationController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $recommendation->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($recommendation);
             $this->entityManager->flush();
+            
+            if ($request->isXmlHttpRequest()) {
+                $this->addFlash('success', 'La recommandation a été supprimée.');
+                return $this->json(['success' => true, 'message' => 'La recommandation a été supprimée.']);
+            }
+            
             $this->addFlash('success', 'La recommandation a été supprimée.');
         }
 
-        return $this->redirect($request->headers->get('referer') ?: $this->generateUrl('app_recommendation'));
+        if ($request->isXmlHttpRequest()) {
+            return $this->json(['success' => false, 'message' => 'Token CSRF invalide.'], 400);
+        }
+
+        $referer = $request->headers->get('referer');
+        if ($referer && str_contains($referer, '/recommendation/' . $recommendation->getId())) {
+            return $this->redirectToRoute('app_recommendation');
+        }
+
+        return $this->redirect($referer ?: $this->generateUrl('app_recommendation'));
     }
 }

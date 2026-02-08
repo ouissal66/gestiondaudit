@@ -10,10 +10,9 @@
             <div class="card-body">
                 {{ include('report/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-                <a href="{{ path('app_report_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
                 
                 <div class="mt-3">
-                    {{ include('report/_delete_form.html.twig') }}
+                    {{ include('report/_delete_form.html.twig', {'redirect': path('app_report_index')}) }}
                 </div>
             </div>
         </div>

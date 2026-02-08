@@ -18,6 +18,63 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    
+    <style>
+        /* DEFINITIVE SIDEBAR FIX (INJECTED) */
+        @media (min-width: 768px) {
+            #wrapper {
+                display: flex !important;
+            }
+
+            .sidebar {
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 14rem !important;
+                z-index: 1031 !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+            }
+
+            #content-wrapper {
+                margin-left: 14rem !important;
+                width: calc(100% - 14rem) !important;
+                min-height: 100vh !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            /* Toggled state */
+            .sidebar.toggled {
+                width: 6.5rem !important;
+            }
+            .sidebar.toggled + #content-wrapper {
+                margin-left: 6.5rem !important;
+                width: calc(100% - 6.5rem) !important;
+            }
+        }
+
+        /* Toast Notification Styles */
+        .delete-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1cc88a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            transform: translateY(-100px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        .delete-toast.show {
+            transform: translateY(0);
+        }
+    </style>
     {% endblock %}
 
 </head>
@@ -65,7 +122,7 @@
             <!-- Nav Item - Recommendation -->
             <li class="nav-item {{ current_route == 'app_recommendation' ? 'active' : '' }}">
                 <a class="nav-link" href="{{ path('app_recommendation') }}">
-                    <i class="fas fa-fw fa-robot"></i>
+                    <i class="fas fa-fw fa-lightbulb"></i>
                     <span>Recommandations</span>
                 </a>
             </li>
@@ -204,6 +261,76 @@
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <!-- SB Admin JS -->
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Global AJAX Delete Handler
+            document.addEventListener('submit', async function(e) {
+                if (e.target.classList.contains('ajax-delete-form')) {
+                    e.preventDefault();
+                    
+                    const form = e.target;
+                    const confirmMsg = form.getAttribute('data-confirm') || 'Voulez-vous vraiment supprimer cet élément ?';
+                    
+                    if (!confirm(confirmMsg)) return;
+                    
+                    const url = form.action;
+                    const formData = new FormData(form);
+                    
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            const redirectUrl = form.getAttribute('data-redirect');
+                            if (redirectUrl) {
+                                window.location.href = redirectUrl;
+                                return;
+                            }
+
+                            // Find the closest parent to remove (list item, table row, or card)
+                            const target = form.closest('.ajax-delete-item') || form.closest('.list-group-item') || form.closest('tr') || form.closest('.card');
+                            if (target) {
+                                target.style.transition = 'all 0.5s ease';
+                                target.style.opacity = '0';
+                                target.style.transform = 'scale(0.9)';
+                                setTimeout(() => target.remove(), 500);
+                            }
+                            
+                            showToast(result.message || 'Élément supprimé avec succès.');
+                        } else {
+                            alert(result.message || 'Une erreur est survenue.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Erreur lors de la suppression.');
+                    }
+                }
+            });
+
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'delete-toast';
+                toast.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ${message}`;
+                document.body.appendChild(toast);
+                
+                // Animate in
+                setTimeout(() => toast.classList.add('show'), 10);
+                
+                // Animate out and remove
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        });
+    </script>
     {% endblock %}
 
 </body>

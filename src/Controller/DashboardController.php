@@ -39,6 +39,7 @@ final class DashboardController extends AbstractController
             'availableTypes' => array_column($types, 'type'),
             'availableStatuses' => array_column($statuses, 'status'),
             'availablePriorities' => array_column($priorities, 'priority'),
+            'allReportsList' => $reportRepository->findBy([], ['title' => 'ASC']),
         ]));
     }
 

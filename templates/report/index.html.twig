@@ -77,7 +77,7 @@
                                     <a href="{{ path('app_report_edit', {'id': report.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="post" action="{{ path('app_report_delete', {'id': report.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rapport ?');" style="display: inline-block;">
+                                    <form method="post" action="{{ path('app_report_delete', {'id': report.id}) }}" class="ajax-delete-form" data-confirm="Êtes-vous sûr de vouloir supprimer ce rapport ?" style="display: inline-block;">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ report.id) }}">
                                         <button class="btn btn-danger btn-sm" title="Supprimer">
                                             <i class="fas fa-trash"></i>

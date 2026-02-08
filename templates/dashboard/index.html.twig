@@ -8,10 +8,17 @@
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Tableau de Bord</h1>
-            <a href="{{ path('app_report_new') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Nouveau Rapport
-            </a>
+            <div>
+                <button type="button" class="btn btn-sm btn-info shadow-sm mr-2" data-toggle="modal" data-target="#recommendationModal">
+                    <i class="fas fa-magic fa-sm text-white-50 mr-1"></i> Recommandation IA
+                </button>
+                <a href="{{ path('app_report_new') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                    <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Nouveau Rapport
+                </a>
+            </div>
         </div>
+
+        {{ include('recommendation/_modal.html.twig', {'reports_list': allReportsList}) }}
 
         <!-- Filters Row -->
         <div class="card shadow mb-4">
