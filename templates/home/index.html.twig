@@ -1,0 +1,476 @@
+{% extends 'baseFront.html.twig' %}
+
+{% block title %}MindAudit AI | Intelligence for Your Business{% endblock %}
+
+{% block body %}
+  <!-- Flash Messages -->
+  <div class="container mt-3" style="position: absolute; top: 100px; left: 50%; transform: translateX(-50%); z-index: 1050; width: 80%;">
+      {% for label, messages in app.flashes %}
+          {% for message in messages %}
+              <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          {% endfor %}
+      {% endfor %}
+  </div>
+
+  <!-- Start header Area -->
+  <section id="hero-area" class="header-area header-eight" style="min-height: 100vh; position: relative; padding-top: 150px;">
+    <div class="container-fluid px-lg-5">
+      <div class="row align-items-center">
+        <div class="col-lg-5 col-md-12 col-12">
+          <div class="header-content">
+            <h1>MindAudit AI : L'Intelligence au Service de votre Entreprise.</h1>
+            <p class="fs-5">
+                 Transformez la manière dont les audits sont réalisés grâce à une plateforme intelligente
+  qui automatise l’analyse des données, structure les processus de contrôle et génère des
+  rapports accompagnés de recommandations pertinentes. En s’appuyant sur l’intelligence
+  artificielle, la solution facilite la prise de décision, renforce la conformité et améliore
+  la performance globale des organisations.
+            </p>
+            <div class="button">
+              <a href="{{ path('app_dashboard') }}" class="btn primary-btn">Aller au Tableau de Bord</a>
+              <a href="https://www.youtube.com/watch?v=58suyR5E6fI"
+                class="glightbox video-button">
+                <span class="btn icon-btn rounded-full">
+                  <i class="lni lni-play"></i>
+                </span>
+                <span class="text">Voir l'Intro</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-12 col-12 px-lg-5">
+            <div class="header-image text-end">
+              <img src="{{ asset('front/images/imgacceuil.jpg') }}" alt="Audit AI Accueil" style="width: 100%; max-width: 1100px; transform: scale(1.1); margin-top: 50px;" />
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End header Area -->
+
+  <!--====== ABOUT FIVE PART START ======-->
+
+  <section class="about-area about-five">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-12">
+          <div class="about-image-five">
+            <img src="{{ asset('front/images/about/about-img1.jpg') }}" alt="about" />
+          </div>
+        </div>
+        <div class="col-lg-6 col-12">
+          <div class="about-five-content">
+            <h6 class="small-title text-lg">NOTRE HISTOIRE</h6>
+            <h2 class="main-title fw-bold">Notre équipe apporte expérience et savoir-faire</h2>
+            <div class="about-five-tab">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-who-tab" data-bs-toggle="tab" data-bs-target="#nav-who"
+                    type="button" role="tab" aria-controls="nav-who" aria-selected="true">Qui sommes-nous</button>
+                  <button class="nav-link" id="nav-vision-tab" data-bs-toggle="tab" data-bs-target="#nav-vision"
+                    type="button" role="tab" aria-controls="nav-vision" aria-selected="false">Notre Vision</button>
+                  <button class="nav-link" id="nav-history-tab" data-bs-toggle="tab" data-bs-target="#nav-history"
+                    type="button" role="tab" aria-controls="nav-history" aria-selected="false">Notre Histoire</button>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-who" role="tabpanel" aria-labelledby="nav-who-tab">
+                  <p>MindAudit AI est né de la volonté de démocratiser l'intelligence artificielle pour les professionnels de l'audit. Nous combinons expertise métier et technologies de pointe.</p>
+                </div>
+                <div class="tab-pane fade" id="nav-vision" role="tabpanel" aria-labelledby="nav-vision-tab">
+                  <p>Notre vision est de révolutionner le secteur de l'audit en offrant des analyses prédictives et automatisées accessibles à tous.</p>
+                </div>
+                <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+                  <p>Après des années de recherche en IA, nous avons lancé MindAudit pour répondre aux défis complexes de la conformité moderne.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- container -->
+  </section>
+
+  <!--====== ABOUT FIVE PART ENDS ======-->
+
+  <!-- ===== service-area start ===== -->
+  <section id="services" class="services-area services-eight">
+    <div class="section-title-five">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="content">
+              <h6>Services</h6>
+              <h2 class="fw-bold">Nos Meilleurs Services</h2>
+              <p>
+                Découvrez comment MindAudit AI peut aider votre entreprise à atteindre l'excellence.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="single-services">
+            <div class="service-icon">
+              <i class="lni lni-capsule"></i>
+            </div>
+            <div class="service-content">
+              <h4>Recommandations IA</h4>
+              <p>
+                Obtenez des recommandations automatisées adaptées à vos rapports d'audit.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-services">
+            <div class="service-icon">
+              <i class="lni lni-dashboard"></i>
+            </div>
+            <div class="service-content">
+              <h4>Tableau de Bord</h4>
+              <p>
+                Surveillez la progression de vos audits et vos statistiques en temps réel.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-services">
+            <div class="service-icon">
+              <i class="lni lni-layers"></i>
+            </div>
+            <div class="service-content">
+              <h4>Gestion des Rapports</h4>
+              <p>
+                Créez, mettez à jour et gérez facilement tous vos rapports d'audit.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== service-area end ===== -->
+
+  <!-- ===== Rapports Module Start ===== -->
+  <section id="reports" class="services-area services-eight" style="background-color: #f9f9f9;">
+    <div class="container">
+      <div class="row align-items-center mb-4">
+          <div class="col-lg-8 col-md-8 col-12">
+            <div class="content mb-0">
+              <h6 class="text-uppercase text-secondary mb-2">Audits Récents</h6>
+              <h2 class="fw-bold mb-0">Rapports Validés</h2>
+              <p class="text-muted mt-2">Consultez les derniers rapports validés.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-12 text-end">
+              <button type="button" class="btn primary-btn btn-sm" data-bs-toggle="modal" data-bs-target="#createReportModal">
+                  <i class="lni lni-plus"></i> Nouveau Rapport
+              </button>
+          </div>
+      </div>
+      <div class="row justify-content-center">
+        {% for report in latest_reports %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="single-services h-100 shadow-sm d-flex flex-column" style="background: white; border-radius: 10px; padding: 30px; border-left: 5px solid {{ report.status == 'Validé' ? '#28a745' : (report.status == 'Critique' ? '#dc3545' : '#ffc107') }};">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge {{ report.status == 'Validé' ? 'bg-success' : (report.status == 'Critique' ? 'bg-danger' : 'bg-warning text-dark') }}">{{ report.status }}</span>
+                    <small class="text-muted fw-bold">{{ report.priority }}</small>
+                </div>
+                <h4 class="mb-3 text-truncate" title="{{ report.title }}">{{ report.title }}</h4>
+                <p class="mb-4 flex-grow-1">{{ report.description|slice(0, 80) }}...</p>
+                
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="score">
+                        <span class="fw-bold text-dark">{{ report.score|default(0) }}%</span>
+                        <div class="progress" style="width: 60px; height: 5px;">
+                            <div class="progress-bar {{ report.score >= 80 ? 'bg-success' : (report.score < 50 ? 'bg-danger' : 'bg-warning') }}" role="progressbar" style="width: {{ report.score|default(0) }}%" aria-valuenow="{{ report.score|default(0) }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <small class="text-muted">{{ report.validationDate ? report.validationDate|date('d/m/Y') : 'En cours' }}</small>
+                </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="col-12 text-center">
+            <p>Aucun rapport terminé pour le moment.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- ===== Rapports Module End ===== -->
+
+  <!-- ===== Recommandations Module Start ===== -->
+  <section id="recommendations" class="about-area about-five">
+    <div class="container">
+      <div class="row">
+          <div class="col-12">
+            <div class="section-title-five text-center mb-5">
+              <h6>Intelligence Artificielle</h6>
+              <h2 class="fw-bold">Recommandations (Rapports Validés)</h2>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+          {% for rec in latest_recommendations %}
+            <div class="about-five-content mb-4 p-4 shadow-sm" style="background: #fff; border-radius: 12px; border-top: 4px solid #4e73df;">
+              <div class="d-flex justify-content-between mb-2">
+                  <h5 class="text-primary">Pour : {{ rec.report.title }}</h5>
+                  <small class="text-muted">{{ rec.createdAt|date('d/m/Y') }}</small>
+              </div>
+              <div class="recommendation-content" style="font-size: 0.95rem; line-height: 1.6;">
+                  {{ rec.content|raw|nl2br }}
+              </div>
+            </div>
+          {% else %}
+              <div class="text-center p-5">
+                  <p>Aucune recommandation générée récemment.</p>
+              </div>
+          {% endfor %}
+         
+      </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== Recommandations Module End ===== -->
+
+  <!-- Start Cta Area -->
+  <section id="call-action" class="call-action">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xxl-6 col-xl-7 col-lg-8 col-md-9">
+          <div class="inner-content">
+            <h2>Transformez votre processus d'audit <br />avec l'IA dès aujourd'hui</h2>
+            <p>
+              Rejoignez des centaines d'entreprises qui font confiance à MindAudit AI pour la gestion de leurs audits.
+            </p>
+            <div class="light-rounded-buttons">
+              <a href="{{ path('app_dashboard') }}" class="btn primary-btn-outline">Commencer Gratuitement</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Cta Area -->
+
+  <!-- Start Pricing Area -->
+  <section id="pricing" class="pricing-area pricing-fourteen">
+    <div class="section-title-five">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="content">
+              <h6>Tarifs</h6>
+              <h2 class="fw-bold">Tarifs & Forfaits</h2>
+              <p>
+                Choisissez le forfait qui correspond aux besoins de votre entreprise.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="pricing-style-fourteen">
+            <div class="table-head">
+              <h6 class="title">Débutant</h6>
+              <p>Parfait pour les indépendants qui débutent.</p>
+              <div class="price">
+                <h2 class="amount">
+                  <span class="currency">€</span>0<span class="duration">/mois </span>
+                </h2>
+              </div>
+            </div>
+            <div class="light-rounded-buttons">
+              <a href="javascript:void(0)" class="btn primary-btn-outline">Essai gratuit</a>
+            </div>
+            <div class="table-content">
+              <ul class="table-list">
+                <li> <i class="lni lni-checkmark-circle"></i> 5 Rapports / mois</li>
+                <li> <i class="lni lni-checkmark-circle"></i> Recommandations IA de base</li>
+                <li> <i class="lni lni-checkmark-circle deactive"></i> Exports personnalisés</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="pricing-style-fourteen middle">
+            <div class="table-head">
+              <h6 class="title">Exclusif</h6>
+              <p>Pour les petites équipes ayant besoin de plus de puissance.</p>
+              <div class="price">
+                <h2 class="amount">
+                  <span class="currency">€</span>99<span class="duration">/mois </span>
+                </h2>
+              </div>
+            </div>
+            <div class="light-rounded-buttons">
+              <a href="javascript:void(0)" class="btn primary-btn">Passer Pro</a>
+            </div>
+            <div class="table-content">
+              <ul class="table-list">
+                <li> <i class="lni lni-checkmark-circle"></i> Rapports illimités</li>
+                <li> <i class="lni lni-checkmark-circle"></i> Analyses IA avancées</li>
+                <li> <i class="lni lni-checkmark-circle"></i> Support prioritaire</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="pricing-style-fourteen">
+            <div class="table-head">
+              <h6 class="title">Entreprise</h6>
+              <p>Pour les grandes organisations ayant des besoins personnalisés.</p>
+              <div class="price">
+                <h2 class="amount">
+                  <span class="currency">€</span>299<span class="duration">/mois </span>
+                </h2>
+              </div>
+            </div>
+            <div class="light-rounded-buttons">
+              <a href="javascript:void(0)" class="btn primary-btn-outline">Nous Contacter</a>
+            </div>
+            <div class="table-content">
+              <ul class="table-list">
+                <li> <i class="lni lni-checkmark-circle"></i> Tout le contenu Exclusif</li>
+                <li> <i class="lni lni-checkmark-circle"></i> Modèles IA personnalisés</li>
+                <li> <i class="lni lni-checkmark-circle"></i> Gestionnaire dédié</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Pricing Area -->
+
+  <!-- ========================= contact-section start ========================= -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-4">
+          <div class="contact-item-wrapper">
+            <div class="row">
+              <div class="col-12 col-md-6 col-xl-12">
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <i class="lni lni-phone"></i>
+                  </div>
+                  <div class="contact-content">
+                    <h4>Contact</h4>
+                    <p>+1 (555) 123-4567</p>
+                    <p>support@mindaudit.ai</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-xl-12">
+                <div class="contact-item">
+                  <div class="contact-icon">
+                    <i class="lni lni-map-marker"></i>
+                  </div>
+                  <div class="contact-content">
+                    <h4>Adresse</h4>
+                    <p>123 Avenue de l'Innovation, Silicon Valley</p>
+                    <p>Californie, USA</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-8">
+          <div class="contact-form-wrapper">
+            <div class="section-title text-center">
+              <span> Contactez-nous </span>
+              <h2>Prêt à commencer ?</h2>
+              <p>Notre équipe est là pour vous aider à tirer le meilleur parti de MindAudit AI.</p>
+            </div>
+            <form action="#" class="contact-form">
+              <div class="row">
+                <div class="col-md-6">
+                  <input type="text" name="name" placeholder="Nom" required />
+                </div>
+                <div class="col-md-6">
+                  <input type="email" name="email" placeholder="Email" required />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <textarea name="message" placeholder="Saisissez votre message" rows="5"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="button text-center rounded-buttons">
+                    <button type="submit" class="btn primary-btn rounded-full">Envoyer le message</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Create Report Modal -->
+<div class="modal fade" id="createReportModal" tabindex="-1" aria-labelledby="createReportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="createReportModalLabel"><i class="lni lni-write"></i> Créer un Nouveau Rapport d'Audit</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        {{ form_start(report_form, {'action': path('app_home'), 'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_errors(report_form) }}
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form_label(report_form.title, 'Titre du Rapport', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(report_form.title, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Audit Financier T1 2024'}}) }}
+                    {{ form_errors(report_form.title) }}
+                </div>
+                <div class="col-md-12 mb-3">
+                    {{ form_label(report_form.type, 'Type d\'Audit', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(report_form.type, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Financier, Sécurité...'}}) }}
+                    {{ form_errors(report_form.type) }}
+                </div>
+                <!-- Hidden fields for defaults -->
+                <div class="d-none">
+                    {{ form_row(report_form.status) }}
+                    {{ form_row(report_form.priority) }}
+                    {{ form_row(report_form.score) }}
+                    {{ form_row(report_form.validationDate) }}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(report_form.description, 'Description Détaillée', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(report_form.description, {'attr': {'class': 'form-control', 'rows': '4', 'placeholder': 'Décrivez les objectifs et la portée de l\'audit...'}}) }}
+                {{ form_errors(report_form.description) }}
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-secondary me-md-2" data-bs-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary"><i class="lni lni-save"></i> Enregistrer le Rapport</button>
+            </div>
+        {{ form_end(report_form) }}
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Rapports{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Mes Rapports</h1>
+
+        <div class="card shadow-primary mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Liste de mes rapports</h6>
+                <a href="{{ path('app_user_report_new') }}" class="btn btn-success btn-sm btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Créer un nouveau</span>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Titre</th>
+                                <th>Statut</th>
+                                <th>Priorité</th>
+                                <th>Score</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Date Validation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for report in reports %}
+                            <tr>
+                                <td>{{ report.id }}</td>
+                                <td>{{ report.title }}</td>
+                                <td>
+                                    {% if report.status == 'Validé' %}
+                                        <span class="badge badge-success">{{ report.status }}</span>
+                                    {% elseif report.status == 'En cours' %}
+                                        <span class="badge badge-primary">{{ report.status }}</span>
+                                    {% elseif report.status == 'Critique' %}
+                                        <span class="badge badge-danger">{{ report.status }}</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">{{ report.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if report.priority == 'Forte' %}
+                                        <span class="text-danger font-weight-bold">{{ report.priority }}</span>
+                                    {% elseif report.priority == 'Moyenne' %}
+                                        <span class="text-warning font-weight-bold">{{ report.priority }}</span>
+                                    {% else %}
+                                        <span class="text-success">{{ report.priority|default('-') }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if report.score is not null %}
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: {{ report.score }}%" aria-valuenow="{{ report.score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <small>{{ report.score }}/100</small>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ report.type }}</td>
+                                <td>{{ report.description|slice(0, 50) ~ (report.description|length > 50 ? '...' : '') }}</td>
+                                <td>{{ report.validationDate ? report.validationDate|date('d/m/Y') : '-' }}</td>
+                                <td>
+                                    <a href="{{ path('app_user_report_show', {'id': report.id}) }}" class="btn btn-info btn-sm" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_user_report_edit', {'id': report.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('app_user_report_delete', {'id': report.id}) }}" class="ajax-delete-form" data-confirm="Êtes-vous sûr de vouloir supprimer ce rapport ?" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ report.id) }}">
+                                        <button class="btn btn-danger btn-sm" title="Supprimer">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="9">Aucun rapport trouvé.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Page level plugins -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
+{% endblock %}

@@ -34,4 +34,21 @@ class RecommendationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Finds recommendations for reports with a specific status.
+     * @param string $status The status of the report (e.g., 'Validé')
+     * @return Recommendation[]
+     */
+    public function findByReportStatus(string $status, int $limit = 3): array
+    {
+        return $this->createQueryBuilder('rec')
+            ->join('rec.report', 'r')
+            ->andWhere('r.status = :status')
+            ->setParameter('status', $status)
+            ->orderBy('rec.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

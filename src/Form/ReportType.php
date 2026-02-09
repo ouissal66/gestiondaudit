@@ -52,6 +52,7 @@ class ReportType extends AbstractType
             ->add('validationDate', DateType::class, [
                 'label' => 'Date de validation',
                 'widget' => 'single_text',
+                'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('description', TextareaType::class, [

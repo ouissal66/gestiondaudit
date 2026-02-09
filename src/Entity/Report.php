@@ -36,7 +36,6 @@ class Report
     private ?string $type = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\NotNull(message: "La date de validation est obligatoire.")]
     private ?\DateTimeImmutable $validationDate = null;
 
     #[ORM\Column]
@@ -142,6 +141,9 @@ class Report
     #[Assert\NotBlank(message: "La priorité est obligatoire.")]
     private ?string $priority = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $source = 'admin';
+
     public function getScore(): ?int
     {
         return $this->score;
@@ -162,6 +164,18 @@ class Report
     public function setPriority(?string $priority): static
     {
         $this->priority = $priority;
+
+        return $this;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): static
+    {
+        $this->source = $source;
 
         return $this;
     }

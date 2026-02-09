@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!--====== Required meta tags ======-->
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!--====== Title ======-->
+  <title>{% block title %}MindAudit AI | Solutions d'Audit Intelligentes{% endblock %}</title>
+
+  <!--====== Favicon Icon ======-->
+  <link rel="shortcut icon" href="{{ asset('front/images/favicon.svg') }}" type="image/svg" />
+
+  {% block stylesheets %}
+  <!--====== Bootstrap css ======-->
+  <link rel="stylesheet" href="{{ asset('front/css/bootstrap.min.css') }}" />
+
+  <!--====== Line Icons css ======-->
+  <link rel="stylesheet" href="{{ asset('front/css/lineicons.css') }}" />
+
+  <!--====== Tiny Slider css ======-->
+  <link rel="stylesheet" href="{{ asset('front/css/tiny-slider.css') }}" />
+
+  <!--====== gLightBox css ======-->
+  <link rel="stylesheet" href="{{ asset('front/css/glightbox.min.css') }}" />
+
+  <link rel="stylesheet" href="{{ asset('front/css/style.css') }}" />
+  {% endblock %}
+</head>
+
+<body>
+
+  <!--====== NAVBAR NINE PART START ======-->
+
+  <section class="navbar-area navbar-nine" style="padding: 5px 0;">
+    <div class="container-fluid px-lg-5">
+      <div class="row">
+        <div class="col-lg-12">
+          <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand d-flex align-items-center" href="{{ path('app_home') }}">
+              <img src="{{ asset('front/images/newlogo.png') }}" alt="MindAudit AI" style="height: 60px;" />
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNine"
+              aria-controls="navbarNine" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse sub-menu-bar" id="navbarNine">
+              <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                  <a class="page-scroll active fs-5 fw-bold" href="#hero-area">Accueil</a>
+                </li>
+                <li class="nav-item">
+                  <a class="page-scroll fs-5 fw-bold" href="#services">Services</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="page-scroll fs-5 fw-bold" href="#pricing">Tarifs</a>
+                </li>
+                <li class="nav-item">
+                  <a class="page-scroll fs-5 fw-bold" href="#contact">Contact</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="navbar-btn d-none d-lg-inline-block">
+              <a class="menu-bar fs-4" href="#side-menu-left"><i class="lni lni-menu"></i></a>
+            </div>
+          </nav>
+          <!-- navbar -->
+        </div>
+      </div>
+      <!-- row -->
+    </div>
+    <!-- container -->
+  </section>
+
+  <!--====== NAVBAR NINE PART ENDS ======-->
+
+  <!--====== SIDEBAR PART START ======-->
+
+  <div class="sidebar-left">
+    <div class="sidebar-close">
+      <a class="close" href="#close"><i class="lni lni-close"></i></a>
+    </div>
+    <div class="sidebar-content">
+      <div class="sidebar-logo">
+        <a href="{{ path('app_home') }}" class="d-flex align-items-center">
+          <img src="{{ asset('front/images/newlogo.png') }}" alt="MindAudit AI" style="height: 50px;" />
+        </a>
+      </div>
+      <p class="text">MindAudit AI simplifie vos audits grâce à la puissance de l'IA.</p>
+      <!-- logo -->
+      <div class="sidebar-menu">
+        <h5 class="menu-title">Liens Rapides</h5>
+        <ul>
+          <li><a href="javascript:void(0)">À propos</a></li>
+          <li><a href="javascript:void(0)">Notre Équipe</a></li>
+          <li><a href="javascript:void(0)">Actualités</a></li>
+          <li><a href="javascript:void(0)">Contactez-nous</a></li>
+        </ul>
+      </div>
+      <!-- menu -->
+      <div class="sidebar-social align-items-center justify-content-center">
+        <h5 class="social-title">Suivez-nous</h5>
+        <ul>
+          <li>
+            <a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a>
+          </li>
+          <li>
+            <a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a>
+          </li>
+          <li>
+            <a href="javascript:void(0)"><i class="lni lni-linkedin-original"></i></a>
+          </li>
+          <li>
+            <a href="javascript:void(0)"><i class="lni lni-youtube"></i></a>
+          </li>
+        </ul>
+      </div>
+      <!-- sidebar social -->
+    </div>
+    <!-- content -->
+  </div>
+  <div class="overlay-left"></div>
+
+  <!--====== SIDEBAR PART ENDS ======-->
+
+  {% block body %}{% endblock %}
+
+  <!-- Start Footer Area -->
+  <footer class="footer-area footer-eleven">
+    <!-- Start Footer Top -->
+    <div class="footer-top">
+      <div class="container">
+        <div class="inner-content">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-12">
+              <!-- Single Widget -->
+              <div class="footer-widget f-about">
+                <div class="logo">
+                  <a href="{{ path('app_home') }}" class="d-flex align-items-center">
+                    <img src="{{ asset('front/images/newlogo.png') }}" alt="MindAudit AI" class="img-fluid" style="height: 50px;" />
+                  </a>
+                </div>
+                <p>
+                   MindAudit AI - L'intelligence artificielle au service de l'excellence de vos audits.
+                </p>
+                <p class="copyright-text">
+                  <span>© 2026 MindAudit AI.</span> Conçu et développé par
+                  <a href="javascript:void(0)" rel="nofollow"> Ayro UI </a>.
+                </p>
+              </div>
+              <!-- End Single Widget -->
+            </div>
+            <div class="col-lg-2 col-md-6 col-12">
+              <!-- Single Widget -->
+              <div class="footer-widget f-link">
+                <h5>Solutions</h5>
+                <ul>
+                  <li><a href="javascript:void(0)">Marketing</a></li>
+                  <li><a href="javascript:void(0)">Analytics</a></li>
+                  <li><a href="javascript:void(0)">Commerce</a></li>
+                  <li><a href="javascript:void(0)">Insights</a></li>
+                </ul>
+              </div>
+              <!-- End Single Widget -->
+            </div>
+            <div class="col-lg-2 col-md-6 col-12">
+              <!-- Single Widget -->
+              <div class="footer-widget f-link">
+                <h5>Support</h5>
+                <ul>
+                  <li><a href="javascript:void(0)">Tarifs</a></li>
+                  <li><a href="javascript:void(0)">Documentation</a></li>
+                  <li><a href="javascript:void(0)">Guides</a></li>
+                  <li><a href="javascript:void(0)">Statut API</a></li>
+                </ul>
+              </div>
+              <!-- End Single Widget -->
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <!-- Single Widget -->
+              <div class="footer-widget newsletter">
+                <h5>S'abonner</h5>
+                <p>Abonnez-vous à notre newsletter pour les dernières nouvelles</p>
+                <form action="#" method="get" target="_blank" class="newsletter-form">
+                  <input name="EMAIL" placeholder="Adresse e-mail" required="required" type="email" />
+                  <div class="button">
+                    <button class="sub-btn">
+                      <i class="lni lni-envelope"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <!-- End Single Widget -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ End Footer Top -->
+  </footer>
+  <!--/ End Footer Area -->
+
+  <a href="#" class="scroll-top btn-hover">
+    <i class="lni lni-chevron-up"></i>
+  </a>
+
+  <!--====== js ======-->
+  <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('front/js/glightbox.min.js') }}"></script>
+  <script src="{{ asset('front/js/main.js') }}"></script>
+  <script src="{{ asset('front/js/tiny-slider.js') }}"></script>
+
+  {% block javascripts %}
+  <script>
+
+    //===== close navbar-collapse when a  clicked
+    let navbarTogglerNine = document.querySelector(
+      ".navbar-nine .navbar-toggler"
+    );
+    if (navbarTogglerNine) {
+        navbarTogglerNine.addEventListener("click", function () {
+          navbarTogglerNine.classList.toggle("active");
+        });
+    }
+
+    // ==== left sidebar toggle
+    let sidebarLeft = document.querySelector(".sidebar-left");
+    let overlayLeft = document.querySelector(".overlay-left");
+    let sidebarClose = document.querySelector(".sidebar-close .close");
+
+    if (overlayLeft) {
+        overlayLeft.addEventListener("click", function () {
+          sidebarLeft.classList.toggle("open");
+          overlayLeft.classList.toggle("open");
+        });
+    }
+    if (sidebarClose) {
+        sidebarClose.addEventListener("click", function () {
+          sidebarLeft.classList.remove("open");
+          overlayLeft.classList.remove("open");
+        });
+    }
+
+    // ===== navbar nine sideMenu
+    let sideMenuLeftNine = document.querySelector(".navbar-nine .menu-bar");
+
+    if (sideMenuLeftNine) {
+        sideMenuLeftNine.addEventListener("click", function () {
+          sidebarLeft.classList.add("open");
+          overlayLeft.classList.add("open");
+        });
+    }
+
+    //========= glightbox
+    GLightbox({
+      'href': 'https://www.youtube.com/watch?v=58suyR5E6fI',
+      'type': 'video',
+      'source': 'youtube', //vimeo, youtube or local
+      'width': 900,
+      'autoplayVideos': true,
+    });
+
+  </script>
+  </script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Check if there are form errors in the modal
+          var modalElement = document.getElementById('createReportModal');
+          if (modalElement && modalElement.querySelector('.invalid-feedback, .alert-danger, .text-danger')) {
+              var modal = new bootstrap.Modal(modalElement);
+              modal.show();
+          }
+      });
+  </script>
+  {% endblock %}
+</body>
+
+</html>

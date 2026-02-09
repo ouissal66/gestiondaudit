@@ -9,111 +9,98 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class DashboardController extends AbstractController
+final class UserDashboardController extends AbstractController
 {
-    #[Route('/dashboard', name: 'app_dashboard')]
+    #[Route('/user/dashboard', name: 'app_user_dashboard')]
     public function index(
         Request $request,
-        ReportRepository $reportRepository,
-        RecommendationRepository $recommendationRepository
+        ReportRepository $reportRepository
     ): Response {
-        $data = $this->aggregateDashboardData($request, $reportRepository, $recommendationRepository);
+        // reuse the same aggregation logic or simplify it for the user
+        $data = $this->aggregateDashboardData($request, $reportRepository);
         
-        // Fetch unique types, statuses, and priorities for the filter dropdowns
+        // Fetch unique types, statuses, and priorities for the filter dropdowns (USER only)
         $types = $reportRepository->createQueryBuilder('r')
             ->select('DISTINCT r.type')
             ->where('r.type IS NOT NULL')
+            ->andWhere('r.source = :source')
+            ->setParameter('source', 'user')
             ->getQuery()->getResult();
         
         $statuses = $reportRepository->createQueryBuilder('r')
             ->select('DISTINCT r.status')
             ->where('r.status IS NOT NULL')
+            ->andWhere('r.source = :source')
+            ->setParameter('source', 'user')
             ->getQuery()->getResult();
-            
             
         $priorities = $reportRepository->createQueryBuilder('r')
             ->select('DISTINCT r.priority')
             ->where('r.priority IS NOT NULL')
+            ->andWhere('r.source = :source')
+            ->setParameter('source', 'user')
             ->getQuery()->getResult();
             
-        // Filter out User reports
-        $allReportsList = $reportRepository->createQueryBuilder('r')
-            ->where('r.source != :sourceUser OR r.source IS NULL')
-            ->setParameter('sourceUser', 'user')
-            ->orderBy('r.title', 'ASC')
-            ->getQuery()->getResult();
-
-        return $this->render('dashboard/index.html.twig', array_merge($data, [
+        return $this->render('user_dashboard/index.html.twig', array_merge($data, [
             'availableTypes' => array_column($types, 'type'),
             'availableStatuses' => array_column($statuses, 'status'),
             'availablePriorities' => array_column($priorities, 'priority'),
-            'allReportsList' => $allReportsList,
+            'allReportsList' => $reportRepository->findBy(['source' => 'user'], ['title' => 'ASC']),
         ]));
     }
 
-    #[Route('/dashboard/stats', name: 'app_dashboard_stats', methods: ['GET'])]
+    #[Route('/user/dashboard/stats', name: 'app_user_dashboard_stats', methods: ['GET'])]
     public function getStats(
         Request $request,
-        ReportRepository $reportRepository,
-        RecommendationRepository $recommendationRepository
+        ReportRepository $reportRepository
     ): Response {
-        $data = $this->aggregateDashboardData($request, $reportRepository, $recommendationRepository);
+        $data = $this->aggregateDashboardData($request, $reportRepository);
         return $this->json($data);
     }
 
     private function aggregateDashboardData(
         Request $request,
-        ReportRepository $reportRepository,
-        RecommendationRepository $recommendationRepository
+        ReportRepository $reportRepository
     ): array {
         $query = $request->query->get('q');
         $type = $request->query->get('type');
         $status = $request->query->get('status');
         $priority = $request->query->get('priority');
 
-        // Factory function for QueryBuilder with shared filters
         $createFilteredQB = function($repository, $alias) use ($query, $type, $status, $priority) {
             $qb = $repository->createQueryBuilder($alias);
-            $reportAlias = ($repository instanceof \App\Repository\RecommendationRepository) ? 'r' : $alias;
             
-            if ($repository instanceof \App\Repository\RecommendationRepository) {
-                $qb->join($alias . '.report', 'r');
-            }
-
-            // EXCLUDE USER REPORTS (Admin View)
-            $qb->andWhere($reportAlias . '.source != :sourceUser OR ' . $reportAlias . '.source IS NULL')
+            // Filter for USER reports only
+            $qb->andWhere($alias . '.source = :sourceUser')
                ->setParameter('sourceUser', 'user');
 
             if ($query) {
-                $qb->andWhere($reportAlias . '.title LIKE :q OR ' . $reportAlias . '.description LIKE :q')
+                $qb->andWhere($alias . '.title LIKE :q OR ' . $alias . '.description LIKE :q')
                    ->setParameter('q', '%' . $query . '%');
             }
             if ($type) {
-                $qb->andWhere($reportAlias . '.type = :type')->setParameter('type', $type);
+                $qb->andWhere($alias . '.type = :type')->setParameter('type', $type);
             }
             if ($status) {
-                $qb->andWhere($reportAlias . '.status = :status')->setParameter('status', $status);
+                $qb->andWhere($alias . '.status = :status')->setParameter('status', $status);
             }
             if ($priority) {
-                $qb->andWhere($reportAlias . '.priority = :priority')->setParameter('priority', $priority);
+                $qb->andWhere($alias . '.priority = :priority')->setParameter('priority', $priority);
             }
 
             return $qb;
         };
 
-        // 1. Histogram: Reports by Type
         $reportsByType = $createFilteredQB($reportRepository, 'r')
             ->select('r.type, COUNT(r.id) as count')
             ->groupBy('r.type')
             ->getQuery()->getResult();
 
-        // 2. Pie Chart: Reports by Status
         $reportsByStatus = $createFilteredQB($reportRepository, 'r')
             ->select('r.status, COUNT(r.id) as count')
             ->groupBy('r.status')
             ->getQuery()->getResult();
 
-        // 3. Performance Curve
         $allReports = $createFilteredQB($reportRepository, 'r')
             ->select("r.createdAt, r.score")
             ->orderBy('r.createdAt', 'ASC')
@@ -135,15 +122,7 @@ final class DashboardController extends AbstractController
         }
         $scoresByMonth = array_slice($scoresByMonth, -6);
 
-        // 4. Bar Chart: Recommendations by Priority
-        $recommendationsByPriority = $createFilteredQB($recommendationRepository, 'rec')
-            ->select('r.priority, COUNT(rec.id) as count')
-            ->groupBy('r.priority')
-            ->getQuery()->getResult();
-
-        // 5. Summary Stats
         $totalReports = count($allReports);
-        $totalRecommendations = array_sum(array_column($recommendationsByPriority, 'count'));
         $criticalCount = 0;
         foreach ($reportsByStatus as $s) {
             if ($s['status'] === 'Critique') $criticalCount = $s['count'];
@@ -154,9 +133,7 @@ final class DashboardController extends AbstractController
             'reportsByType' => $reportsByType,
             'reportsByStatus' => $reportsByStatus,
             'scoresByMonth' => $scoresByMonth,
-            'recommendationsByPriority' => $recommendationsByPriority,
             'totalReports' => $totalReports,
-            'totalRecommendations' => $totalRecommendations,
             'criticalCount' => $criticalCount,
             'avgScore' => $avgScore,
         ];

@@ -73,7 +73,9 @@ final class ReportController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $report = new Report();
-        $form = $this->createForm(ReportType::class, $report);
+        $form = $this->createForm(ReportType::class, $report, [
+            'action' => $this->generateUrl('app_report_new', ['redirect' => $request->query->get('redirect')]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -84,6 +86,10 @@ final class ReportController extends AbstractController
                 $this->addFlash('danger', 'Attention : Un rapport de priorité FORTE a été ajouté !');
             } else {
                 $this->addFlash('success', 'Le rapport a été créé avec succès.');
+            }
+
+            if ($request->query->get('redirect') === 'home') {
+                return $this->redirectToRoute('app_home');
             }
 
             return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
@@ -106,13 +112,19 @@ final class ReportController extends AbstractController
     #[Route('/{id}/edit', name: 'app_report_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Report $report, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ReportType::class, $report);
+        $form = $this->createForm(ReportType::class, $report, [
+            'action' => $this->generateUrl('app_report_edit', ['id' => $report->getId(), 'redirect' => $request->query->get('redirect')]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             $this->addFlash('success', 'Le rapport a été mis à jour avec succès.');
+
+            if ($request->query->get('redirect') === 'home') {
+                return $this->redirectToRoute('app_home');
+            }
 
             return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -140,6 +152,10 @@ final class ReportController extends AbstractController
 
         if ($request->isXmlHttpRequest()) {
             return $this->json(['success' => false, 'message' => 'Token CSRF invalide.'], 400);
+        }
+
+        if ($request->query->get('redirect') === 'home') {
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->redirectToRoute('app_report_index', [], Response::HTTP_SEE_OTHER);
